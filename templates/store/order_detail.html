@@ -1,26 +1,11 @@
 {% extends 'base.html' %}
 
+{% block title %}Order Details - CRICXO{% endblock %}
+
 {% block content %}
-<h2>Order #{{ order.id }}</h2>
-<p>Status: <span class="badge bg-secondary">{{ order.get_status_display }}</span></p>
-<p>Total: ${{ order.total }}</p>
-<h3>Items:</h3>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Product</th>
-            <th>Quantity</th>
-            <th>Price</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in order.items.all %}
-        <tr>
-            <td>{{ item.product.name }}</td>
-            <td>{{ item.quantity }}</td>
-            <td>${{ item.price }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<h1>Order Details</h1>
+<div class="alert alert-info">
+    Order detail functionality will be implemented here.
+</div>
+<a href="{% url 'store:product_list' %}" class="btn btn-primary">Continue Shopping</a>
 {% endblock %}

@@ -1,78 +1,67 @@
 {% extends 'base.html' %}
 
+{% block title %}{{ product.title }} - CRICXO{% endblock %}
+
 {% block content %}
 <div class="row">
-    <div class="col-md-8">
-        <h2>{{ product.name }}</h2>
-        {% if product.image %}
-        <img src="{{ product.image.url }}" class="img-fluid mb-3" alt="{{ product.name }}">
-        {% endif %}
+    <div class="col-md-6">
+        <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.title }}">
+    </div>
+    <div class="col-md-6">
+        <h1>{{ product.title }}</h1>
+        <p class="lead">${{ product.price }}</p>
         <p>{{ product.description }}</p>
-        <p><strong>Price: ${{ product.price }}</strong></p>
-        <p>Stock: {{ product.stock }}</p>
+
         {% if user.is_authenticated %}
-        <form method="post" action="{% url 'add_to_cart' pk=product.pk %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary">Add to Cart</button>
-        </form>
-        <a href="{% url 'add_to_wishlist' pk=product.pk %}" class="btn btn-outline-secondary mt-2">Add to Wishlist</a>
+        <div class="mb-3">
+            <a href="{% url 'store:add_to_wishlist' product_id=product.id %}" class="btn btn-outline-secondary">Add to Wishlist</a>
+            <a href="{% url 'store:cart_add' product_id=product.id %}" class="btn btn-primary">Add to Cart</a>
+        </div>
         {% endif %}
-    </div>
-    <div class="col-md-4">
-        <h3>Recommended Products</h3>
-        {% for rec in recommendations %}
-        <div class="card mb-2">
+
+        <h3>Reviews</h3>
+        {% for review in reviews %}
+        <div class="card mb-3">
             <div class="card-body">
-                <h5 class="card-title"><a href="{% url 'product_detail' pk=rec.pk %}" class="text-decoration-none">{{ rec.name }}</a></h5>
-                <p class="card-text">${{ rec.price }}</p>
+                <div class="d-flex justify-content-between">
+                    <strong>{{ review.created_by.username }}</strong>
+                    <small>{{ review.created_at|date:"M d, Y" }}</small>
+                </div>
+                <div class="mb-2">
+                    {% for i in "12345"|make_list %}
+                        {% if forloop.counter <= review.rating %}
+                            ⭐
+                        {% else %}
+                            ☆
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <p>{{ review.content }}</p>
             </div>
         </div>
         {% endfor %}
-        {% if ai_recommendations %}
-        <h3>AI Recommendations</h3>
-        {% for rec in ai_recommendations %}
-        <div class="card mb-2">
+
+        {% if user.is_authenticated %}
+        <div class="card">
+            <div class="card-header">
+                <h5>Write a Review</h5>
+            </div>
             <div class="card-body">
-                <h5 class="card-title"><a href="{% url 'product_detail' pk=rec.pk %}" class="text-decoration-none">{{ rec.name }}</a></h5>
-                <p class="card-text">${{ rec.price }}</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="{{ form.rating.id_for_label }}" class="form-label">Rating</label>
+                        {{ form.rating }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.content.id_for_label }}" class="form-label">Review</label>
+                        {{ form.content }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                </form>
             </div>
         </div>
-        {% endfor %}
         {% endif %}
     </div>
-</div>
-<div class="mt-5">
-    <h3>Reviews</h3>
-    {% for review in reviews %}
-    <div class="card mb-2">
-        <div class="card-body">
-            <h5 class="card-title">{{ review.user.username }} <small class="text-muted">{{ review.created_at|date }}</small></h5>
-            <p>Rating: {{ review.rating }}/5</p>
-            <p>{{ review.comment }}</p>
-        </div>
-    </div>
-    {% endfor %}
-    {% if user.is_authenticated %}
-    <h4>Add Review</h4>
-    <form method="post">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label>Rating</label>
-            <select name="rating" class="form-control" required>
-                <option value="">Select</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label>Comment</label>
-            <textarea name="comment" class="form-control"></textarea>
-        </div>
-        <button type="submit" class="btn btn-secondary">Submit Review</button>
-    </form>
-    {% endif %}
 </div>
 {% endblock %}

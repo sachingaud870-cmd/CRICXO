@@ -1,47 +1,11 @@
 {% extends 'base.html' %}
 
+{% block title %}Checkout - CRICXO{% endblock %}
+
 {% block content %}
-<h2>Checkout</h2>
-<h3>Order Summary</h3>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Product</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Subtotal</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for product, qty in items %}
-        <tr>
-            <td>{{ product.name }}</td>
-            <td>{{ qty }}</td>
-            <td>${{ product.price }}</td>
-            <td>${{ product.price|mul:qty }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-<p class="h4">Total: ${{ total }}</p>
-<form method="post">
-    {% csrf_token %}
-    <h3>Payment Details</h3>
-    <p>Enter card details (simulated):</p>
-    <div class="mb-3">
-        <label>Card Number</label>
-        <input type="text" class="form-control" placeholder="1234 5678 9012 3456" required>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <label>Expiry Date</label>
-            <input type="text" class="form-control" placeholder="MM/YY" required>
-        </div>
-        <div class="col-md-6">
-            <label>CVV</label>
-            <input type="text" class="form-control" placeholder="123" required>
-        </div>
-    </div>
-    <button type="submit" class="btn btn-success mt-3">Pay Now</button>
-</form>
+<h1>Checkout</h1>
+<div class="alert alert-info">
+    Checkout functionality will be implemented here.
+</div>
+<a href="{% url 'store:cart_detail' %}" class="btn btn-secondary">Back to Cart</a>
 {% endblock %}
