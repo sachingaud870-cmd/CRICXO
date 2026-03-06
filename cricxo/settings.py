@@ -134,6 +134,22 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'  # for collectstatic
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# Security settings for production
+# These are relaxed for development but should be set for production deployment
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_SECURITY_POLICY = {
+        "default-src": ("'self'",),
+        "script-src": ("'self'", "cdn.jsdelivr.net"),
+        "style-src": ("'self'", "cdn.jsdelivr.net", "'unsafe-inline'"),
+    }
+
 # Stripe settings
-STRIPE_PUBLIC_KEY = 'pk_test_...'  # Replace with your test public key
-STRIPE_SECRET_KEY = 'sk_test_...'  # Replace with your test secret key
+STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', 'pk_test_...')
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', 'sk_test_...')
