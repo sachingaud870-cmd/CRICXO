@@ -1,2 +1,2 @@
-web: gunicorn CRICXO.VS.cricxo.wsgi --log-file -
-release: python CRICXO.VS/manage.py migrate
+web: gunicorn cricxo.wsgi --log-file -
+release: python manage.py migrate
