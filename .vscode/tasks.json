@@ -1,0 +1,20 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run Server",
+			"type": "shell",
+			"command": "d:/CRICXO.VS/.venv/Scripts/python.exe"
+		},
+		{
+			"label": "Run Server",
+			"type": "shell",
+			"command": "d:/CRICXO.VS/.venv/Scripts/python.exe",
+			"args": [
+				"manage.py",
+				"runserver"
+			],
+			"isBackground": true
+		}
+	]
+}
